@@ -3,7 +3,6 @@ from functools import reduce
 from pyspark import *
 from pyspark.sql import *
 from operator import add
-import shortuuid
 
 spark = SparkSession.builder.appName('fun').getOrCreate() 
 
@@ -62,7 +61,7 @@ def broadcast_hyp(x):
     return hypid,ar
 
 def init_graph():
-    hyp_lines = spark.read.text("email-enron.txt").rdd.map(lambda x: hyp_df(x, " ")).toDF()
+    hyp_lines = spark.read.text("com-orkut.top5000.cmty.txt").rdd.map(lambda x: hyp_df(x, "\t")).toDF()
     hyp_lines.show()
     hyp_lines = hyp_lines.withColumn("id", monotonically_increasing_id())
     hyp_lines.show()
@@ -92,8 +91,10 @@ def parseNeighbors(edge):
 
 def getContributions(ur):
     len_urls = len(ur[1][0])
+    if len_urls == 0:
+        len_urls = 1
     for site in sum(ur[1][0],[]):
-        yield site, ur[1][1]/(len_urls-1)
+        yield site, ur[1][1]/(len_urls)
 
 def parallel_pagerank(iterations, graph):
     all_vertices =graph.vertices.filter('type=="vertex"')
