@@ -15,4 +15,8 @@ Use spark submit like:
 
 spark-submit --packages graphframes:graphframes:0.8.1-spark2.4-s_2.11 <python-code.py>
 
+1) to run bipartite page rank, do 
+
+spark-submit --packages graphframes:graphframes:0.8.1-spark2.4-s_2.11 bipartite_page_rank.py
+
 Be sure to install spark 2.4 version and graph frames 0.8.1 version
