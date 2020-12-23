@@ -3,6 +3,7 @@ from functools import reduce
 from pyspark import *
 from pyspark.sql import *
 from operator import add
+import time
 
 spark = SparkSession.builder.appName('fun').getOrCreate() 
 
@@ -61,7 +62,9 @@ def broadcast_hyp(x):
     return hypid,ar
 
 def init_graph():
-    hyp_lines = spark.read.text("com-orkut.top5000.cmty.txt").rdd.map(lambda x: hyp_df(x, "\t")).toDF()
+    #hyp_lines = spark.read.text("com-friendster.top5000.cmty.txt").rdd.map(lambda x: hyp_df(x, "\t")).toDF()
+    #hyp_lines = spark.read.text("com-orkut.top5000.cmty.txt").rdd.map(lambda x: hyp_df(x, "\t")).toDF()
+    hyp_lines = spark.read.text("email-enron.txt").rdd.map(lambda x: hyp_df(x, " ")).toDF()
     hyp_lines.show()
     hyp_lines = hyp_lines.withColumn("id", monotonically_increasing_id())
     hyp_lines.show()
@@ -77,7 +80,9 @@ def init_graph():
     new_hyperedges = df_hyp.collectAsMap()
     return new_g, new_hyperedges
 
+p_start_time = time.time()
 new_g,new_hyperedges = init_graph()
+p_end_time = time.time()
 print(new_g)
 
 def initialize_page_rank(vertex, count):
@@ -104,12 +109,18 @@ def parallel_pagerank(iterations, graph):
     all_edges.show()
     ranks = all_vertices.rdd.map(lambda x:(x.id,initialize_page_rank(x, num_vertices))) #
     hyperedge_links = all_edges.rdd.map(lambda el: parseNeighbors(el)).groupByKey().cache() # vertex hyp1 hyp2 hyp3
-    #for i in range(iterations):
-    print("hylinks",hyperedge_links.take(5))
-    result_links = hyperedge_links.join(ranks).flatMap(lambda ur:getContributions(ur))
-    print("reslinks",result_links.take(5))
-    ranks = result_links.reduceByKey(add).mapValues(lambda rank: rank * 0.85 + 0.15)
+    for i in range(iterations):
+        print("hylinks",hyperedge_links.take(5))
+        result_links = hyperedge_links.join(ranks).flatMap(lambda ur:getContributions(ur))
+        print("reslinks",result_links.take(5))
+        ranks = result_links.reduceByKey(add).mapValues(lambda rank: rank * 0.85 + 0.15)
+    df_ranks = ranks.toDF(["vertex", "page_rank"])
+    df_ranks.show()
+    df_ranks.write.csv("email-enron_pagerank.csv")
     print(ranks.collect())
 
 
-parallel_pagerank(5,new_g)
+start_time = time.time()
+parallel_pagerank(2,new_g)
+print("--- Execution Time: %s seconds ---" % (time.time() - start_time))
+print("--- Partition Time: %s seconds ---" % (p_end_time - p_start_time))
