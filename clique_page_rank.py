@@ -49,7 +49,7 @@ start_time = time.time()
 new_g = init_graph(sys.argv[1])
 end_time = time.time()
 exec_start = time.time()
-results2 = new_g.pageRank(resetProbability=0.15, maxIter=1)
+results2 = new_g.pageRank(resetProbability=0.15, maxIter=sys.argv[2])
 exec_end = time.time()
 
 print(results2.vertices.show())

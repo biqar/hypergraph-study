@@ -4,6 +4,7 @@ from pyspark import *
 from pyspark.sql import *
 from operator import add
 import time
+import sys
 
 spark = SparkSession.builder.appName('fun').getOrCreate() 
 
@@ -64,7 +65,7 @@ def broadcast_hyp(x):
 def init_graph():
     #hyp_lines = spark.read.text("com-friendster.top5000.cmty.txt").rdd.map(lambda x: hyp_df(x, "\t")).toDF()
     #hyp_lines = spark.read.text("com-orkut.top5000.cmty.txt").rdd.map(lambda x: hyp_df(x, "\t")).toDF()
-    hyp_lines = spark.read.text("email-enron.txt").rdd.map(lambda x: hyp_df(x, " ")).toDF()
+    hyp_lines = spark.read.text(sys.argv[1]).rdd.map(lambda x: hyp_df(x, " ")).toDF()
     hyp_lines.show()
     hyp_lines = hyp_lines.withColumn("id", monotonically_increasing_id())
     hyp_lines.show()
@@ -102,6 +103,7 @@ def getContributions(ur):
         yield site, ur[1][1]/(len_urls)
 
 def parallel_pagerank(iterations, graph):
+    iterations = int(iterations)
     all_vertices =graph.vertices.filter('type=="vertex"')
     num_vertices = all_vertices.count()
     all_edges = graph.edges
@@ -116,11 +118,11 @@ def parallel_pagerank(iterations, graph):
         ranks = result_links.reduceByKey(add).mapValues(lambda rank: rank * 0.85 + 0.15)
     df_ranks = ranks.toDF(["vertex", "page_rank"])
     df_ranks.show()
-    df_ranks.write.csv("email-enron_pagerank.csv")
+    df_ranks.write.csv(sys.argv[1] + ".csv")
     print(ranks.collect())
 
 
 start_time = time.time()
-parallel_pagerank(2,new_g)
+parallel_pagerank(sys.argv[2],new_g)
 print("--- Execution Time: %s seconds ---" % (time.time() - start_time))
 print("--- Partition Time: %s seconds ---" % (p_end_time - p_start_time))
