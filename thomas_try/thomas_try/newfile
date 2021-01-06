@@ -1,0 +1,58 @@
+lines
+EDGESRCDEST
+Traceback (most recent call last):
+  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/broadcast.py", line 113, in dump
+    pickle.dump(value, f, 2)
+  File "/usr/lib/spark/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+    answer, self.gateway_client, self.target_id, self.name)
+  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/sql/utils.py", line 63, in deco
+    return f(*a, **kw)
+  File "/usr/lib/spark/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 332, in get_return_value
+    format(target_id, ".", name, value))
+py4j.protocol.Py4JError: An error occurred while calling o77.__getstate__. Trace:
+py4j.Py4JException: Method __getstate__([]) does not exist
+	at py4j.reflection.ReflectionEngine.getMethod(ReflectionEngine.java:318)
+	at py4j.reflection.ReflectionEngine.getMethod(ReflectionEngine.java:326)
+	at py4j.Gateway.invoke(Gateway.java:274)
+	at py4j.commands.AbstractCommand.invokeMethod(AbstractCommand.java:132)
+	at py4j.commands.CallCommand.execute(CallCommand.java:79)
+	at py4j.GatewayConnection.run(GatewayConnection.java:238)
+	at java.lang.Thread.run(Thread.java:748)
+
+
+Traceback (most recent call last):
+  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/broadcast.py", line 113, in dump
+  File "/usr/lib/spark/python/lib/py4j-0.10.7-src.zip/py4j/java_gateway.py", line 1257, in __call__
+  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/sql/utils.py", line 63, in deco
+  File "/usr/lib/spark/python/lib/py4j-0.10.7-src.zip/py4j/protocol.py", line 332, in get_return_value
+py4j.protocol.Py4JError: An error occurred while calling o77.__getstate__. Trace:
+py4j.Py4JException: Method __getstate__([]) does not exist
+	at py4j.reflection.ReflectionEngine.getMethod(ReflectionEngine.java:318)
+	at py4j.reflection.ReflectionEngine.getMethod(ReflectionEngine.java:326)
+	at py4j.Gateway.invoke(Gateway.java:274)
+	at py4j.commands.AbstractCommand.invokeMethod(AbstractCommand.java:132)
+	at py4j.commands.CallCommand.execute(CallCommand.java:79)
+	at py4j.GatewayConnection.run(GatewayConnection.java:238)
+	at java.lang.Thread.run(Thread.java:748)
+
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/hadoop/page_rank_graph.py", line 65, in <module>
+    broadcastStates = spark.sparkContext.broadcast(states)
+  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/context.py", line 874, in broadcast
+  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/broadcast.py", line 91, in __init__
+  File "/usr/lib/spark/python/lib/pyspark.zip/pyspark/broadcast.py", line 120, in dump
+_pickle.PicklingError: Could not serialize broadcast: Py4JError: An error occurred while calling o77.__getstate__. Trace:
+py4j.Py4JException: Method __getstate__([]) does not exist
+	at py4j.reflection.ReflectionEngine.getMethod(ReflectionEngine.java:318)
+	at py4j.reflection.ReflectionEngine.getMethod(ReflectionEngine.java:326)
+	at py4j.Gateway.invoke(Gateway.java:274)
+	at py4j.commands.AbstractCommand.invokeMethod(AbstractCommand.java:132)
+	at py4j.commands.CallCommand.execute(CallCommand.java:79)
+	at py4j.GatewayConnection.run(GatewayConnection.java:238)
+	at java.lang.Thread.run(Thread.java:748)
+
+
