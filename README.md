@@ -1,26 +1,25 @@
 # hypergraph-study
-## Installation required
-The installation required are 
+
+## Installation
+The installation required the following libraries
 1) Java 7+
-2) Apache Spark
-3) Graph frames 
+2) Apache Spark (Code tested in version 2.4)
+    * Please use this link to install spark: https://spark.apache.org/docs/latest/
+3) Graph frames (Tested in version 0.8.1)
+    * Please use this to install graphframes: https://graphframes.github.io/graphframes/docs/_site/index.html
 
-Please use this to install
-https://spark.apache.org/docs/latest/
-
-Please use this to install graphframes
-https://graphframes.github.io/graphframes/docs/_site/index.html
-
+## Useful run commands
 Use spark submit like:
+```
+> spark-submit --packages graphframes:graphframes:0.8.1-spark2.4-s_2.11 <python-code.py>
+```
 
-spark-submit --packages graphframes:graphframes:0.8.1-spark2.4-s_2.11 <python-code.py>
+To run bipartite page rank, do 
+```
+> spark-submit --packages graphframes:graphframes:0.8.1-spark2.4-s_2.11 bipartite_page_rank.py
+```
 
-1) to run bipartite page rank, do 
-
-spark-submit --packages graphframes:graphframes:0.8.1-spark2.4-s_2.11 bipartite_page_rank.py
-
-2) to run clique page rank
-
-spark-submit --packages graphframes:graphframes:0.8.1-spark2.4-s_2.11 clique_page_rank.py
-
-Be sure to install spark 2.4 version and graph frames 0.8.1 version
+To run clique page rank
+```
+> spark-submit --packages graphframes:graphframes:0.8.1-spark2.4-s_2.11 clique_page_rank.py
+```
