@@ -2,7 +2,7 @@ from graphframes import *
 from pyspark import *
 from pyspark.sql import *
 spark = SparkSession.builder.appName('fun').getOrCreate()
-with open("email-enron.txt", 'r') as file:
+with open("data/email-enron.txt", 'r') as file:
     lines = file.read().split("\n")
 
 print("lines")
