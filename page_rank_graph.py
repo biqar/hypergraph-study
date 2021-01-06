@@ -5,7 +5,7 @@ from pyspark.sql import *
 spark = SparkSession.builder.appName('fun').getOrCreate()
 
 
-with open("../data/testgraph", 'r') as file:
+with open("data/testgraph", 'r') as file:
     lines = file.read().split("\n")
 
 print("lines")
